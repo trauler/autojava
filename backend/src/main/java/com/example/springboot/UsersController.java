@@ -34,7 +34,7 @@ public class UsersController {
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<User> updateUser(@Valid @PathVariable(value = "id") Long userId, @Valid @RequestBody User userDetails) throws ResourceNotFoundException {
+    public ResponseEntity<User> updateUser(@Valid @PathVariable(value = "id") Integer userId, @Valid @RequestBody User userDetails) throws ResourceNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id: " + userId));
 
         user.setEmail(userDetails.getEmail());
@@ -44,11 +44,12 @@ public class UsersController {
     }
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         log.info("Request to delete user: {}", id);
         userRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
+    //hard version
 //    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
 //        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id: " + userId));
 //

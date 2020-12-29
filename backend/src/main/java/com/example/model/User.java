@@ -6,11 +6,11 @@ import javax.persistence.*;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Integer id;
     @Column(name = "status")
-    private int status;
+    private Integer status;
     @Column(name = "email")
     private String email;
     @Column(name = "name")
@@ -25,48 +25,43 @@ public class User {
     }
     public User() {}
 
-    @Column(name = "status")
-    public int getStatus() {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getStatus() {
         return status;
     }
-    public void setStatus(int status) {
+
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    @Column(name = "email", nullable = true)
-    //must be false, yep
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @Column(name = "name", nullable = true)
-    //must be false, yep
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    @Column(name = "encrypted_password", nullable = true)
-    //must be false, yep
     public String getEncryptedPassword() {
         return encryptedPassword;
     }
+
     public void setEncryptedPassword(String encryptedPassword) {
         this.encryptedPassword = encryptedPassword;
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }
