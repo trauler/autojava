@@ -1,6 +1,7 @@
 package com.example.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Table(name = "USERS")
 @Entity
@@ -17,6 +18,8 @@ public class User {
     private String name;
     @Column(name = "encrypted_password")
     private String encryptedPassword;
+    @OneToMany(mappedBy = "user")
+    private Set<Workshop> workshop;
 
     public User(String email, String name, String encryptedPassword) {
         this.email = email;

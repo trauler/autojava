@@ -17,13 +17,17 @@ public class WorkshopsController {
     private final Logger log = LoggerFactory.getLogger(WorkshopsController.class);
     private WorkshopRepository workshopRepository;
 
-    public WorkshopsController(WorkshopRepository workshopRepository) {
+    private final UserWorkshopService userWorkshopService;
+
+    public WorkshopsController(WorkshopRepository workshopRepository, UserWorkshopService userWorkshopService) {
         this.workshopRepository = workshopRepository;
+        this.userWorkshopService = userWorkshopService;
     }
 
-    @GetMapping("/workshops")
-    public List<Workshop> getAllWorkshops() {
-        return workshopRepository.findAll();
+    @GetMapping("/user/{id}/workshops")
+    public List<UserWorkshopDto> getAllWorkshops(@PathVariable (value = "id") Integer id) {
+        List<UserWorkshopDto> userWorkshop = userWorkshopService.getAllUsersWorkshops(id);
+        return userWorkshop;
     }
 
     @PostMapping("/workshop")
@@ -37,9 +41,9 @@ public class WorkshopsController {
     public ResponseEntity<Workshop> updateWorkshop(@Valid @PathVariable(value = "id") Integer workshopId, @Valid @RequestBody Workshop workshopDetails) throws ResourceNotFoundException {
         Workshop workshop = workshopRepository.findById(workshopId).orElseThrow(() -> new ResourceNotFoundException("Workshop not found for this id: " + workshopId));
         workshop.setName(workshopDetails.getName());
-        //dopilit` update time
+        //should be timestamp
         final Workshop updatedWorkshop = workshopRepository.save(workshop);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(updatedWorkshop);
     }
 
     @DeleteMapping("/workshop/{id}")
