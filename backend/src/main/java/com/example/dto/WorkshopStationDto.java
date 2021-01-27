@@ -1,4 +1,4 @@
-package com.example.springboot;
+package com.example.dto;
 
 import javax.validation.constraints.NotNull;
 

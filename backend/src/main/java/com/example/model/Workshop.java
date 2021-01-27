@@ -1,7 +1,10 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.sql.DatabaseMetaData;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.List;
 
@@ -15,14 +18,19 @@ public class Workshop {
     @Column(name = "vid")
     private Integer vid;
     @Column(name = "name")
+    @NotNull
     private String name;
     @Column(name = "updated_at")
     private Date updatedAt; //fix it
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull
     private User user;
     @OneToMany(mappedBy = "workshop")
+    @JsonBackReference
     private List<Station> stationsList;
+
+    public Workshop() {}
 
     public List<Station> getStationsList() {
         return stationsList;
@@ -43,7 +51,6 @@ public class Workshop {
     public Workshop(String name) {
         this.name = name;
     }
-    public Workshop(){};
 
     public Integer getId() {
         return id;

@@ -1,6 +1,9 @@
 package com.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Table(name = "USERS")
@@ -18,15 +21,29 @@ public class User {
     private String name;
     @Column(name = "encrypted_password")
     private String encryptedPassword;
-    @OneToMany(mappedBy = "user")
-    private Set<Workshop> workshop;
 
-    public User(String email, String name, String encryptedPassword) {
-        this.email = email;
-        this.name = name;
-        this.encryptedPassword = encryptedPassword;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Workshop> workshopList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Warehouse> warehouseList;
+
+    public List<Warehouse> getWarehouseList() {
+        return warehouseList;
     }
-    public User() {}
+
+    public void setWarehouseList(List<Warehouse> warehouseList) {
+        this.warehouseList = warehouseList;
+    }
+
+    public List<Workshop> getWorkshopList() {
+        return workshopList;
+    }
+
+    public void setWorkshopList(List<Workshop> workshopList) {
+        this.workshopList = workshopList;
+    }
 
     public Integer getId() {
         return id;
