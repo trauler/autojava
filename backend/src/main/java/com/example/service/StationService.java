@@ -30,6 +30,7 @@ public class StationService {
         workshop.setStationsList(workshop.getStationsList().stream().filter(s -> !s.getId().equals(stationId)).collect(Collectors.toList()));
         workshopRepository.save(workshop);
     }
+
     public PostWorkshopStationRequestDto createStation(Integer id, String name) {
         Station station = new Station();
         Workshop workshop = new Workshop();
