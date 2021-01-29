@@ -29,6 +29,17 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Warehouse> warehouseList;
 
+    @OneToMany(mappedBy = "user")
+    private List<Client> clientList;
+
+    public List<Client> getClientList() {
+        return clientList;
+    }
+
+    public void setClientList(List<Client> clientList) {
+        this.clientList = clientList;
+    }
+
     public List<Warehouse> getWarehouseList() {
         return warehouseList;
     }
