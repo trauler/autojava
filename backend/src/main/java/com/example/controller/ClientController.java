@@ -30,8 +30,8 @@ public class ClientController {
                 clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());
     }
 
-    @PutMapping("/client/{id}")
-    public GetClientResponseDto updateClient(@PathVariable (value = "id") int clientId,
+    @PutMapping("/client/{clientId}")
+    public GetClientResponseDto updateClient(@PathVariable (value = "clientId") int clientId,
                                              @Valid @RequestBody GetClientResponseDto clientDetails) {
         return clientService.updateClient(clientId, clientDetails.getName(), clientDetails.getSurname(),
                 clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());

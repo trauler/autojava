@@ -28,22 +28,22 @@ public class WarehouseController {
         return userWarehouse;
     }
 
-    @PostMapping("/user/{id}/warehouse")
-    public PostWarehouseResponseDto createWarehouse(@Valid @PathVariable (value = "id") Integer userId,
+    @PostMapping("/user/{userId}/warehouse")
+    public PostWarehouseResponseDto createWarehouse(@PathVariable (value = "userId") Integer userId,
                                                     @Valid @RequestBody PostWarehouseRequestDto warehouseDetails) {
         return warehouseService.createWarehouse(userId, warehouseDetails.getName(), warehouseDetails.getAddress());
     }
 
-    @PutMapping("/user/{id}/warehouse/{id1}")
-    public PostWarehouseResponseDto updateWarehouse(@Valid @PathVariable (value = "id") Integer userId,
-                                                    @Valid @PathVariable (value = "id1") Integer warehouseId,
+    @PutMapping("/user/{userId}/warehouse/{warehouseId}")
+    public PostWarehouseResponseDto updateWarehouse(@PathVariable (value = "userId") Integer userId,
+                                                    @PathVariable (value = "warehouseId") Integer warehouseId,
                                                     @Valid @RequestBody PostWarehouseRequestDto warehouseDetails) {
         return warehouseService.updateWarehouse(userId, warehouseId, warehouseDetails.getName(), warehouseDetails.getAddress());
     }
 
-    @DeleteMapping("/user/{id}/warehouse/{id1}")
-    public void deleteWarehouse(@PathVariable (value = "id") Integer userId,
-                                @PathVariable (value = "id1") Integer warehouseId) {
+    @DeleteMapping("/user/{userId}/warehouse/{warehouseId}")
+    public void deleteWarehouse(@PathVariable (value = "userId") Integer userId,
+                                @PathVariable (value = "warehouseId") Integer warehouseId) {
         warehouseService.deleteWarehouse(userId, warehouseId);
     }
 }

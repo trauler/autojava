@@ -6,6 +6,8 @@ import com.example.dto.UserWorkshopDto;
 import com.example.service.WorkshopService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,9 +24,10 @@ public class WorkshopController {
         this.workshopService = workshopService;
     }
 
-    @GetMapping("/user/{id}/workshops")
-    public List<UserWorkshopDto> getAllUsersWorkshops(@PathVariable (value = "id") int id) {
-        List<UserWorkshopDto> userWorkshop = workshopService.getAllUsersWorkshops(id);
+    @GetMapping("/workshops")
+    public List<UserWorkshopDto> getAllUsersWorkshops(Authentication auth) {
+        String username = ((User)auth.getPrincipal()).getUsername();
+        List<UserWorkshopDto> userWorkshop = workshopService.getAllUsersWorkshops(username);
         return userWorkshop;
     }
 

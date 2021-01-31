@@ -34,10 +34,10 @@ public class StationController {
         return stationService.createStation(id, stationDetails.getName());
     }
 
-    @PutMapping("/workshop/{id}/station/{id1}")
-    public PostWorkshopStationRequestDto updateWorkshopStation(@Valid @PathVariable(value = "id") Integer workshopId,
+    @PutMapping("/workshop/{workshopId}/station/{stationId}")
+    public PostWorkshopStationRequestDto updateWorkshopStation(@PathVariable(value = "workshopId") Integer workshopId,
                                                                @Valid @RequestBody PostWorkshopStationRequestDto stationDetails,
-                                                               @Valid @PathVariable(value = "id1") Integer stationId) throws ResourceNotFoundException {
+                                                               @PathVariable(value = "stationId") Integer stationId) throws ResourceNotFoundException {
         return stationService.updateStation(workshopId, stationId, stationDetails.getName());
     }
 

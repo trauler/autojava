@@ -22,8 +22,8 @@ public class WorkshopService {
         this.userRepository = userRepository;
     }
 
-    public List<UserWorkshopDto> getAllUsersWorkshops(Integer id) {
-        return userRepository.findById(id)
+    public List<UserWorkshopDto> getAllUsersWorkshops(String userName) {
+        return userRepository.findByEmail(userName)
                 .map(User::getWorkshopList)
                 .map(wl -> wl.stream().map(this::convertToUserWorkshopServiceDTO).collect(Collectors.toList()))
                 .orElseThrow();
