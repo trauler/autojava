@@ -22,19 +22,26 @@ public class WorkshopService {
         this.userRepository = userRepository;
     }
 
-    public List<UserWorkshopDto> getAllUsersWorkshops(String userName) {
-        return userRepository.findByEmail(userName)
+    public List<UserWorkshopDto> getAllUsersWorkshops(Integer id) {
+        return userRepository.findById(id)
                 .map(User::getWorkshopList)
                 .map(wl -> wl.stream().map(this::convertToUserWorkshopServiceDTO).collect(Collectors.toList()))
                 .orElseThrow();
     }
 
-    public void deleteWorkshop(Integer id) {
-        workshopRepository.deleteById(id);
+    public void deleteWorkshop(int userId, int workshopId) {
+        Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
+        if (workshop.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot update this workshop");
+        }
+        workshopRepository.deleteById(workshopId);
     }
 
-    public WorkshopDto updateWorkshop(int id, String name) {
-        Workshop workshop = workshopRepository.findById(id).orElseThrow();
+    public WorkshopDto updateWorkshop(int userId, int workshopId, String name) {
+        Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
+        if (workshop.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot update this workshop");
+        }
         workshop.setName(name);
         return convertToWorkshopDto(workshopRepository.save(workshop));
     }

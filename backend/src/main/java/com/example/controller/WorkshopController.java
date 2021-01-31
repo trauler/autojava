@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.config.UserInfo;
 import com.example.dto.PostWorkshopRequestDto;
 import com.example.dto.WorkshopDto;
 import com.example.dto.UserWorkshopDto;
@@ -7,7 +8,6 @@ import com.example.service.WorkshopService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,26 +26,29 @@ public class WorkshopController {
 
     @GetMapping("/workshops")
     public List<UserWorkshopDto> getAllUsersWorkshops(Authentication auth) {
-        String username = ((User)auth.getPrincipal()).getUsername();
-        List<UserWorkshopDto> userWorkshop = workshopService.getAllUsersWorkshops(username);
-        return userWorkshop;
+        Integer id = ((UserInfo)auth.getPrincipal()).getId();
+        return workshopService.getAllUsersWorkshops(id);
     }
 
     @PostMapping("/workshop")
-    public WorkshopDto createWorkshop(@Valid @RequestBody PostWorkshopRequestDto workshopDetails) {
+    public WorkshopDto createWorkshop(Authentication auth, @Valid @RequestBody PostWorkshopRequestDto workshopDetails) {
         log.info("Request to create workshop: {}", workshopDetails);
-        return workshopService.createWorkshop(workshopDetails.getName(), workshopDetails.getUserId());
+        Integer id = ((UserInfo)auth.getPrincipal()).getId();
+        return workshopService.createWorkshop(workshopDetails.getName(), id);
     }
 
-    @PutMapping("/workshop/{id}")
-    public WorkshopDto updateWorkshop(@PathVariable(value = "id") int id,
+    @PutMapping("/workshop/{workshopId}")
+    public WorkshopDto updateWorkshop(Authentication auth,
+                                      @PathVariable(value = "workshopId") int workshopId,
                                       @Valid @RequestBody WorkshopDto workshopDetails) {
-        return workshopService.updateWorkshop(id, workshopDetails.getWorkshopName());
+        Integer id = ((UserInfo)auth.getPrincipal()).getId();
+        return workshopService.updateWorkshop(id, workshopId, workshopDetails.getWorkshopName());
     }
 
-    @DeleteMapping("/workshop/{id}")
-    public void deleteWorkshop(@PathVariable int id) {
-        log.info("Request to delete workshop: {}", id);
-        workshopService.deleteWorkshop(id);
+    @DeleteMapping("/workshop/{workshopId}")
+    public void deleteWorkshop(Authentication auth, @PathVariable(value = "workshopId") int workshopId) {
+        log.info("Request to delete workshop: {}", workshopId);
+        Integer id = ((UserInfo)auth.getPrincipal()).getId();
+        workshopService.deleteWorkshop(id, workshopId);
     }
 }
