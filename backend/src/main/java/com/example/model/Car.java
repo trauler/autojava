@@ -3,6 +3,7 @@ package com.example.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@Table(name = "car")
 @Entity
 public class Car {
     @Id
