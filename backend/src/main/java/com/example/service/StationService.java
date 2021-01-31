@@ -21,6 +21,16 @@ public class StationService {
         this.stationRepository = stationRepository;
         this.workshopRepository = workshopRepository;
     }
+
+    public void deleteStation(Integer workshopId, Integer stationId) {
+        Station station = new Station();
+        Workshop workshop = new Workshop();
+        workshop.setId(workshopId);
+        station.setWorkshop(workshop);
+        workshop.setStationsList(workshop.getStationsList().stream().filter(s -> !s.getId().equals(stationId)).collect(Collectors.toList()));
+        workshopRepository.save(workshop);
+    }
+
     public PostWorkshopStationRequestDto createStation(Integer id, String name) {
         Station station = new Station();
         Workshop workshop = new Workshop();
@@ -28,13 +38,11 @@ public class StationService {
         station.setName(name);
         station.setWorkshop(workshop);
         return convertToWorkshopStationRequestDto(stationRepository.save(station));
-
     }
 
     public PostWorkshopStationRequestDto updateStation(Integer workshopId, Integer stationId, String name) {
         Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
         Station station = stationRepository.findById(stationId).orElseThrow();
-        workshop.setId(workshopId);
         station.setWorkshop(workshop);
         station.setId(stationId);
         station.setName(name);

@@ -1,6 +1,7 @@
 package com.example.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,6 +29,28 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Warehouse> warehouseList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Client> clientList;
+
+    @OneToMany(mappedBy = "user")
+    private List<AutoPart> autoPartClient;
+
+    public List<AutoPart> getAutoPartClient() {
+        return autoPartClient;
+    }
+
+    public void setAutoPartClient(List<AutoPart> autoPartClient) {
+        this.autoPartClient = autoPartClient;
+    }
+
+    public List<Client> getClientList() {
+        return clientList;
+    }
+
+    public void setClientList(List<Client> clientList) {
+        this.clientList = clientList;
+    }
 
     public List<Warehouse> getWarehouseList() {
         return warehouseList;
