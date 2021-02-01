@@ -1,7 +1,11 @@
 package com.example.controller;
 
+import com.example.config.UserInfo;
 import com.example.dto.GetClientResponseDto;
 import com.example.service.ClientService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -10,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class ClientController {
+    private final Logger log = LoggerFactory.getLogger(ClientController.class);
 
     private final ClientService clientService;
 
@@ -17,28 +22,38 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @GetMapping("/user/{id}/clients")
-    public List<GetClientResponseDto> getAllUsersClients(@PathVariable (value = "id") int id) {
-        List<GetClientResponseDto> clientList = clientService.getAllUsersClients(id);
+    @GetMapping("/clients")
+    public List<GetClientResponseDto> getAllUsersClients(Authentication auth) {
+        log.info(auth + " request to get all users clients");
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        List<GetClientResponseDto> clientList = clientService.getAllUsersClients(userId);
         return clientList;
     }
 
-    @PostMapping("/user/{id}/client")
-    public GetClientResponseDto createClient(@PathVariable (value = "id") int id,
+    @PostMapping("/client")
+    public GetClientResponseDto createClient(Authentication auth,
                                              @Valid @RequestBody GetClientResponseDto clientDetails) {
-        return clientService.createClient(id, clientDetails.getName(), clientDetails.getSurname(),
+        log.info(auth + " request to create new client");
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return clientService.createClient(userId, clientDetails.getName(), clientDetails.getSurname(),
                 clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());
     }
 
     @PutMapping("/client/{clientId}")
-    public GetClientResponseDto updateClient(@PathVariable (value = "clientId") int clientId,
+    public GetClientResponseDto updateClient(Authentication auth,
+                                             @PathVariable (value = "clientId") int clientId,
                                              @Valid @RequestBody GetClientResponseDto clientDetails) {
-        return clientService.updateClient(clientId, clientDetails.getName(), clientDetails.getSurname(),
+        log.info(auth + " request to update client");
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return clientService.updateClient(userId, clientId, clientDetails.getName(), clientDetails.getSurname(),
                 clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());
     }
 
-    @DeleteMapping("/client/{id}")
-    public void deleteClient(@PathVariable (value = "id") int clientID) {
-        clientService.deleteClient(clientID);
+    @DeleteMapping("/client/{clientId}")
+    public void deleteClient(Authentication auth,
+                             @PathVariable (value = "clientId") int clientId) {
+        log.info(auth + " request to delete client");
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        clientService.deleteClient(userId, clientId);
     }
 }

@@ -1,9 +1,11 @@
 package com.example.service;
 
 import com.example.dto.PostWorkshopStationRequestDto;
+import com.example.model.User;
 import com.example.model.Workshop;
 import com.example.model.Station;
 import com.example.repositore.StationRepository;
+import com.example.repositore.UserRepository;
 import com.example.repositore.WorkshopRepository;
 import com.example.dto.WorkshopStationDto;
 import org.springframework.stereotype.Service;
@@ -16,44 +18,58 @@ public class StationService {
 
     private final StationRepository stationRepository;
     private final WorkshopRepository workshopRepository;
+    private final UserRepository userRepository;
 
-    public StationService(StationRepository stationRepository, WorkshopRepository workshopRepository) {
+    public StationService(StationRepository stationRepository, WorkshopRepository workshopRepository, UserRepository userRepository) {
         this.stationRepository = stationRepository;
         this.workshopRepository = workshopRepository;
+        this.userRepository = userRepository;
     }
 
-    public void deleteStation(Integer workshopId, Integer stationId) {
+    public List<WorkshopStationDto> getAllStationsFromWorkshop(int userId, int workshopId) {
+        Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
+        if (workshop.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot view this stations");
+        }
+        return workshopRepository.findById(workshopId)
+                .map(Workshop::getStationsList)
+                .map(sl -> sl.stream().map(this::convertToWorkshopStationDTO).collect(Collectors.toList()))
+                .orElseThrow();
+    }
+
+    public PostWorkshopStationRequestDto createStation(int userId, int workshopId, String name) {
+        Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
+        if (workshop.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot create stations at this workshop");
+        }
         Station station = new Station();
-        Workshop workshop = new Workshop();
-        workshop.setId(workshopId);
         station.setWorkshop(workshop);
-        workshop.setStationsList(workshop.getStationsList().stream().filter(s -> !s.getId().equals(stationId)).collect(Collectors.toList()));
-        workshopRepository.save(workshop);
-    }
-
-    public PostWorkshopStationRequestDto createStation(Integer id, String name) {
-        Station station = new Station();
-        Workshop workshop = new Workshop();
-        workshop.setId(id);
         station.setName(name);
         station.setWorkshop(workshop);
         return convertToWorkshopStationRequestDto(stationRepository.save(station));
     }
 
-    public PostWorkshopStationRequestDto updateStation(Integer workshopId, Integer stationId, String name) {
+    public PostWorkshopStationRequestDto updateStation(int userId, int workshopId, int stationId, String name) {
         Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
+        if (workshop.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot update station at this workshop");
+        }
         Station station = stationRepository.findById(stationId).orElseThrow();
         station.setWorkshop(workshop);
         station.setId(stationId);
         station.setName(name);
         return convertToWorkshopStationRequestDto(stationRepository.save(station));
     }
-
-    public List<WorkshopStationDto> getAllStationsFromWorkshop(Integer id) {
-        return workshopRepository.findById(id)
-                .map(Workshop::getStationsList)
-                .map(sl -> sl.stream().map(this::convertToWorkshopStationDTO).collect(Collectors.toList()))
-                .orElseThrow();
+//TODO wtf
+    public void deleteStation(int userId, int workshopId, int stationId) {
+        Station station = new Station();
+        Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
+        if (workshop.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot delete station at this workshop");
+        }
+        station.setWorkshop(workshop);
+        workshop.setStationsList(workshop.getStationsList().stream().filter(s -> !s.getId().equals(stationId)).collect(Collectors.toList()));
+        workshopRepository.save(workshop);
     }
 
     private PostWorkshopStationRequestDto convertToWorkshopStationRequestDto(Station station) {

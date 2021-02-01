@@ -21,36 +21,43 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public GetClientResponseDto createClient(int id, String name, String surname, String middleName, String phone, String email) {
-        Client client = new Client();
-        client.setUser(userRepository.findById(id).orElseThrow());
-        client.setName(name);
-        client.setSurname(surname);
-        client.setMiddleName(middleName);
-        client.setPhone(phone);
-        client.setEmail(email);
-        return convertToGetClientResponseDto(clientRepository.save(client));
-    }
-    //fix it redundant userID
-    public GetClientResponseDto updateClient(int id, String name, String surname, String middleName, String phone, String email) {
-        Client client = clientRepository.findById(id).orElseThrow();
-        client.setName(name);
-        client.setSurname(surname);
-        client.setMiddleName(middleName);
-        client.setPhone(phone);
-        client.setEmail(email);
-        return convertToGetClientResponseDto(clientRepository.save(client));
-    }
-
-    public void deleteClient(Integer id) {
-        clientRepository.deleteById(id);
-    }
-
-    public List<GetClientResponseDto> getAllUsersClients(Integer id) {
-        return userRepository.findById(id)
+    public List<GetClientResponseDto> getAllUsersClients(int userId) {
+        return userRepository.findById(userId)
                 .map(User::getClientList)
                 .map(cl -> cl.stream().map(this::convertToGetClientResponseDto).collect(Collectors.toList()))
                 .orElseThrow();
+    }
+
+    public GetClientResponseDto createClient(int userId, String name, String surname, String middleName, String phone, String email) {
+        Client client = new Client();
+        client.setUser(userRepository.findById(userId).orElseThrow());
+        client.setName(name);
+        client.setSurname(surname);
+        client.setMiddleName(middleName);
+        client.setPhone(phone);
+        client.setEmail(email);
+        return convertToGetClientResponseDto(clientRepository.save(client));
+    }
+
+    public GetClientResponseDto updateClient(int userId, int clientId, String name, String surname, String middleName, String phone, String email) {
+        Client client = clientRepository.findById(clientId).orElseThrow();
+        if (client.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot update this client");
+        }
+        client.setName(name);
+        client.setSurname(surname);
+        client.setMiddleName(middleName);
+        client.setPhone(phone);
+        client.setEmail(email);
+        return convertToGetClientResponseDto(clientRepository.save(client));
+    }
+
+    public void deleteClient(int userId, int clientId) {
+        Client client = clientRepository.findById(clientId).orElseThrow();
+        if (client.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot delete this client");
+        }
+        clientRepository.deleteById(clientId);
     }
 
     private GetClientResponseDto convertToGetClientResponseDto(Client client) {
