@@ -60,7 +60,7 @@ public class StationService {
         station.setName(name);
         return convertToWorkshopStationRequestDto(stationRepository.save(station));
     }
-//TODO wtf
+//TODO wtf business-logic
     public void deleteStation(int userId, int workshopId, int stationId) {
         Station station = new Station();
         Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();

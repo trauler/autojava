@@ -54,8 +54,8 @@ public class StationController {
 
     @DeleteMapping("/workshop/{workshopId}/station{stationId}")
     public void deleteWorkshopStation(Authentication auth,
-                                      @PathVariable Integer workshopId,
-                                      @PathVariable Integer stationId) {
+                                      @PathVariable int workshopId,
+                                      @PathVariable int stationId) {
         log.info(auth + " request to delete station ");
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         stationService.deleteStation(userId, workshopId, stationId);

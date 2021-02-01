@@ -44,7 +44,7 @@ public class CarController {
                 carDetails.getModel(), carDetails.getVin(), carDetails.getPlate());
     }
 
-    //TODO fix it
+    //TODO fix it some business logic
     @DeleteMapping("/client/{clientId}/car/{carId}")
     public void deleteCar(Authentication auth,
                           @PathVariable(value = "clientId") int clientId,
