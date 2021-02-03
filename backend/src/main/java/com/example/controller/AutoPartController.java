@@ -24,7 +24,7 @@ public class AutoPartController {
 
     @GetMapping("/parts")
     public List<AutoPartDto> getAllUsersParts(Authentication auth) {
-        log.info(auth + " request to get all parts");
+        log.info("{} request to get all parts", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return autoPartService.getAllUsersAutoParts(userId);
     }
@@ -32,7 +32,7 @@ public class AutoPartController {
     @PostMapping("/part")
     public AutoPartDto createUsersPart(Authentication auth,
                                        @Valid @RequestBody AutoPartDto autoPartDetails) {
-        log.info(auth + " request to update a part");
+        log.info("{} request to update a part", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return autoPartService.createAutoPart(userId, autoPartDetails.getName(), autoPartDetails.getDescription(),
                 autoPartDetails.getPurchasePrice(), autoPartDetails.getRetailPrice(), autoPartDetails.getQuantity());
@@ -42,7 +42,7 @@ public class AutoPartController {
     public AutoPartDto updateUsersPart(Authentication auth,
                                        @PathVariable (value = "partId") int partId,
                                        @Valid @RequestBody AutoPartDto autoPartDetails) {
-        log.info(auth + " request to update a part");
+        log.info("{} request to update a part", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return autoPartService.updateAutoPart(userId, partId, autoPartDetails.getName(), autoPartDetails.getDescription(),
                 autoPartDetails.getPurchasePrice(), autoPartDetails.getRetailPrice(), autoPartDetails.getQuantity());
@@ -51,7 +51,7 @@ public class AutoPartController {
     @DeleteMapping("/part/{partId}")
     public void deletePart(Authentication auth,
                            @PathVariable (value = "partId") int partId) {
-        log.info(auth + " request to delete a part");
+        log.info("{} request to delete a part", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         autoPartService.deleteAutoPart(userId, partId);
     }

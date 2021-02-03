@@ -19,12 +19,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow();
-        String temporaryRole = "ROLE_USER";
 
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
                 .username(email)
                 .password(user.getEncryptedPassword())
-                .authorities(temporaryRole)
+                .authorities(UserRole.USER.getName())
                 .build();
         return new UserInfo(user.getId(), userDetails);
     }

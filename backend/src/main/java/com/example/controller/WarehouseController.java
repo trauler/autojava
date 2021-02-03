@@ -26,7 +26,7 @@ public class WarehouseController {
 
     @GetMapping("/warehouses")
     public List<WarehouseDto> getAllUsersWarehouses(Authentication auth) {
-        log.info("Request to get all warehouses: " + auth);
+        log.info("{} request to get all warehouses", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return warehouseService.getAllUsersWarehouses(userId);
     }

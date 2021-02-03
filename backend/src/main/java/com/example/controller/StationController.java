@@ -28,7 +28,7 @@ public class StationController {
     @GetMapping("/workshop/{workshopId}/stations")
     public List<WorkshopStationDto> getAllStationsByWorkshopId(Authentication auth,
                                                                @PathVariable(value = "workshopId") int workshopId) {
-        log.info(auth + " request to get all workshops stations");
+        log.info("{} request to get all workshops stations", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return stationService.getAllStationsFromWorkshop(userId, workshopId);
     }
@@ -37,7 +37,7 @@ public class StationController {
     public PostWorkshopStationRequestDto createWorkshopStations(Authentication auth,
                                                                 @Valid @RequestBody PostWorkshopStationRequestDto stationDetails,
                                                                 @PathVariable("workshopId") int workshopId) {
-        log.info(auth + " request to create station");
+        log.info("{} request to create station", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return stationService.createStation(userId, workshopId, stationDetails.getName());
     }
@@ -47,7 +47,7 @@ public class StationController {
                                                                @PathVariable(value = "workshopId") int workshopId,
                                                                @Valid @RequestBody PostWorkshopStationRequestDto stationDetails,
                                                                @PathVariable(value = "stationId") int stationId) throws ResourceNotFoundException {
-        log.info(auth + " request to update station");
+        log.info("{} request to update station", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return stationService.updateStation(userId, workshopId, stationId, stationDetails.getName());
     }
@@ -56,7 +56,7 @@ public class StationController {
     public void deleteWorkshopStation(Authentication auth,
                                       @PathVariable int workshopId,
                                       @PathVariable int stationId) {
-        log.info(auth + " request to delete station ");
+        log.info("{} request to delete station", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         stationService.deleteStation(userId, workshopId, stationId);
     }

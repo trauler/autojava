@@ -26,14 +26,15 @@ public class WorkshopController {
 
     @GetMapping("/workshops")
     public List<UserWorkshopDto> getAllUsersWorkshops(Authentication auth) {
-        log.info("Request to get all workshops: " + auth);
+        log.info("{} request to get all workshops", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return workshopService.getAllUsersWorkshops(userId);
     }
 
     @PostMapping("/workshop")
-    public WorkshopDto createWorkshop(Authentication auth, @Valid @RequestBody PostWorkshopRequestDto workshopDetails) {
-        log.info("Request to create workshop: ", workshopDetails);
+    public WorkshopDto createWorkshop(Authentication auth,
+                                      @Valid @RequestBody PostWorkshopRequestDto workshopDetails) {
+        log.info("{} request to create workshop: ", auth);
         Integer id = ((UserInfo)auth.getPrincipal()).getId();
         return workshopService.createWorkshop(workshopDetails.getName(), id);
     }
@@ -48,7 +49,7 @@ public class WorkshopController {
 
     @DeleteMapping("/workshop/{workshopId}")
     public void deleteWorkshop(Authentication auth, @PathVariable(value = "workshopId") int workshopId) {
-        log.info("Request to delete workshop: {}", workshopId);
+        log.info("{} request to delete workshop", auth);
         Integer id = ((UserInfo)auth.getPrincipal()).getId();
         workshopService.deleteWorkshop(id, workshopId);
     }

@@ -24,7 +24,7 @@ public class ClientController {
 
     @GetMapping("/clients")
     public List<GetClientResponseDto> getAllUsersClients(Authentication auth) {
-        log.info(auth + " request to get all users clients");
+        log.info("{} request to get all users clients", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         List<GetClientResponseDto> clientList = clientService.getAllUsersClients(userId);
         return clientList;
@@ -33,7 +33,7 @@ public class ClientController {
     @PostMapping("/client")
     public GetClientResponseDto createClient(Authentication auth,
                                              @Valid @RequestBody GetClientResponseDto clientDetails) {
-        log.info(auth + " request to create new client");
+        log.info("{} request to create new client", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return clientService.createClient(userId, clientDetails.getName(), clientDetails.getSurname(),
                 clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());
@@ -43,7 +43,7 @@ public class ClientController {
     public GetClientResponseDto updateClient(Authentication auth,
                                              @PathVariable (value = "clientId") int clientId,
                                              @Valid @RequestBody GetClientResponseDto clientDetails) {
-        log.info(auth + " request to update client");
+        log.info("{} request to update client", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return clientService.updateClient(userId, clientId, clientDetails.getName(), clientDetails.getSurname(),
                 clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());
@@ -52,7 +52,7 @@ public class ClientController {
     @DeleteMapping("/client/{clientId}")
     public void deleteClient(Authentication auth,
                              @PathVariable (value = "clientId") int clientId) {
-        log.info(auth + " request to delete client");
+        log.info("{} request to delete client", auth);
         Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         clientService.deleteClient(userId, clientId);
     }
