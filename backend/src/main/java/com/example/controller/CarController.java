@@ -1,12 +1,14 @@
 package com.example.controller;
 
+import com.example.config.UserInfo;
 import com.example.dto.GetCarResponseDto;
 import com.example.service.CarService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-
+//TODO car to vehicle
 @RestController
 @RequestMapping("/api")
 public class CarController {
@@ -16,28 +18,38 @@ public class CarController {
         this.carService = carService;
     }
 
-    @GetMapping("/client/{id}/cars")
-    public List<GetCarResponseDto> getAllClientsCar(@PathVariable(value = "id") int id) {
-        return carService.getAllClientsCars(id);
+    @GetMapping("/client/{clientId}/cars")
+    public List<GetCarResponseDto> getAllClientsCar(Authentication auth,
+                                                    @PathVariable(value = "clientId") int clientId) {
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return carService.getAllClientsCars(userId, clientId);
     }
 
     @PostMapping("/client/{id}/car")
-    public GetCarResponseDto createCar(@PathVariable(value = "id") int id,
+    public GetCarResponseDto createCar(Authentication auth,
+                                       @PathVariable(value = "clientId") int clientId,
                                        @Valid @RequestBody GetCarResponseDto carDetails) {
-        return carService.createCar(id, carDetails.getBrand(), carDetails.getModel(), carDetails.getVin(), carDetails.getPlate());
-    }
-
-    @PutMapping("/client/{id}/car/{id1}")
-    public GetCarResponseDto updateCar(@PathVariable(value = "id") int clientId,
-                                       @Valid @RequestBody GetCarResponseDto carDetails,
-                                       @PathVariable(value = "id1") int carId) {
-        return carService.updateCar(clientId, carId, carDetails.getBrand(),
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return carService.createCar(userId, clientId, carDetails.getBrand(),
                 carDetails.getModel(), carDetails.getVin(), carDetails.getPlate());
     }
 
-    @DeleteMapping("/client/{id}/car/{id1}")
-    public void deleteCar(@PathVariable(value = "id") int clientId,
-                          @PathVariable(value = "id1") int carId) {
-        carService.deleteCar(carId);
+    @PutMapping("/client/{clientId}/car/{carId}")
+    public GetCarResponseDto updateCar(Authentication auth,
+                                       @PathVariable(value = "clientId") int clientId,
+                                       @Valid @RequestBody GetCarResponseDto carDetails,
+                                       @PathVariable(value = "carId") int carId) {
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return carService.updateCar(userId, clientId, carId, carDetails.getBrand(),
+                carDetails.getModel(), carDetails.getVin(), carDetails.getPlate());
+    }
+
+    //TODO fix it some business logic
+    @DeleteMapping("/client/{clientId}/car/{carId}")
+    public void deleteCar(Authentication auth,
+                          @PathVariable(value = "clientId") int clientId,
+                          @PathVariable(value = "carId") int carId) {
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        carService.deleteCar(userId, carId);
     }
 }

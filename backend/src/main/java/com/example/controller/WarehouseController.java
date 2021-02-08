@@ -1,11 +1,13 @@
 package com.example.controller;
 
+import com.example.config.UserInfo;
 import com.example.dto.PostWarehouseRequestDto;
 import com.example.dto.PostWarehouseResponseDto;
 import com.example.dto.WarehouseDto;
 import com.example.service.WarehouseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,28 +24,32 @@ public class WarehouseController {
         this.warehouseService = warehouseService;
     }
 
-    @GetMapping("/user/{id}/warehouse/")
-    public List<WarehouseDto> getAllUsersWarehouses(@PathVariable (value = "id") Integer id) {
-        List<WarehouseDto> userWarehouse = warehouseService.getAllUsersWarehouses(id);
-        return userWarehouse;
+    @GetMapping("/warehouses")
+    public List<WarehouseDto> getAllUsersWarehouses(Authentication auth) {
+        log.info("{} request to get all warehouses", auth);
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return warehouseService.getAllUsersWarehouses(userId);
     }
 
-    @PostMapping("/user/{id}/warehouse")
-    public PostWarehouseResponseDto createWarehouse(@Valid @PathVariable (value = "id") Integer userId,
+    @PostMapping("/warehouse")
+    public PostWarehouseResponseDto createWarehouse(Authentication auth,
                                                     @Valid @RequestBody PostWarehouseRequestDto warehouseDetails) {
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return warehouseService.createWarehouse(userId, warehouseDetails.getName(), warehouseDetails.getAddress());
     }
 
-    @PutMapping("/user/{id}/warehouse/{id1}")
-    public PostWarehouseResponseDto updateWarehouse(@Valid @PathVariable (value = "id") Integer userId,
-                                                    @Valid @PathVariable (value = "id1") Integer warehouseId,
+    @PutMapping("/warehouse/{warehouseId}")
+    public PostWarehouseResponseDto updateWarehouse(Authentication auth,
+                                                    @PathVariable (value = "warehouseId") int warehouseId,
                                                     @Valid @RequestBody PostWarehouseRequestDto warehouseDetails) {
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return warehouseService.updateWarehouse(userId, warehouseId, warehouseDetails.getName(), warehouseDetails.getAddress());
     }
 
-    @DeleteMapping("/user/{id}/warehouse/{id1}")
-    public void deleteWarehouse(@PathVariable (value = "id") Integer userId,
-                                @PathVariable (value = "id1") Integer warehouseId) {
+    @DeleteMapping("/warehouse/{warehouseId}")
+    public void deleteWarehouse(Authentication auth,
+                                @PathVariable (value = "warehouseId") int warehouseId) {
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         warehouseService.deleteWarehouse(userId, warehouseId);
     }
 }

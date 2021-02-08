@@ -36,6 +36,17 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<AutoPart> autoPartClient;
 
+    @OneToMany(mappedBy = "user")
+    private List<Service> serviceList;
+
+    public List<Service> getServiceList() {
+        return serviceList;
+    }
+
+    public void setServiceList(List<Service> serviceList) {
+        this.serviceList = serviceList;
+    }
+
     public List<AutoPart> getAutoPartClient() {
         return autoPartClient;
     }

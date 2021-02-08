@@ -1,14 +1,20 @@
 package com.example.controller;
 
+import com.example.config.UserInfo;
 import com.example.dto.AutoPartDto;
 import com.example.service.AutoPartService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class AutoPartController {
+    private final Logger log = LoggerFactory.getLogger(AutoPartController.class);
 
     private final AutoPartService autoPartService;
 
@@ -16,10 +22,37 @@ public class AutoPartController {
         this.autoPartService = autoPartService;
     }
 
-    @GetMapping("/user/{id}/parts")
-    public List<AutoPartDto> getAllUsersParts(@PathVariable(value = "id") int userId) {
+    @GetMapping("/parts")
+    public List<AutoPartDto> getAllUsersParts(Authentication auth) {
+        log.info("{} request to get all parts", auth);
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
         return autoPartService.getAllUsersAutoParts(userId);
     }
 
-//    @PostMapping("/")
+    @PostMapping("/part")
+    public AutoPartDto createUsersPart(Authentication auth,
+                                       @Valid @RequestBody AutoPartDto autoPartDetails) {
+        log.info("{} request to update a part", auth);
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return autoPartService.createAutoPart(userId, autoPartDetails.getName(), autoPartDetails.getDescription(),
+                autoPartDetails.getPurchasePrice(), autoPartDetails.getRetailPrice(), autoPartDetails.getQuantity());
+    }
+
+    @PutMapping("/part/{partId}")
+    public AutoPartDto updateUsersPart(Authentication auth,
+                                       @PathVariable (value = "partId") int partId,
+                                       @Valid @RequestBody AutoPartDto autoPartDetails) {
+        log.info("{} request to update a part", auth);
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return autoPartService.updateAutoPart(userId, partId, autoPartDetails.getName(), autoPartDetails.getDescription(),
+                autoPartDetails.getPurchasePrice(), autoPartDetails.getRetailPrice(), autoPartDetails.getQuantity());
+    }
+
+    @DeleteMapping("/part/{partId}")
+    public void deletePart(Authentication auth,
+                           @PathVariable (value = "partId") int partId) {
+        log.info("{} request to delete a part", auth);
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        autoPartService.deleteAutoPart(userId, partId);
+    }
 }

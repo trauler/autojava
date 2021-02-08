@@ -22,21 +22,11 @@ public class WorkshopService {
         this.userRepository = userRepository;
     }
 
-    public List<UserWorkshopDto> getAllUsersWorkshops(Integer id) {
-        return userRepository.findById(id)
+    public List<UserWorkshopDto> getAllUsersWorkshops(int userId) {
+        return userRepository.findById(userId)
                 .map(User::getWorkshopList)
                 .map(wl -> wl.stream().map(this::convertToUserWorkshopServiceDTO).collect(Collectors.toList()))
                 .orElseThrow();
-    }
-
-    public void deleteWorkshop(Integer id) {
-        workshopRepository.deleteById(id);
-    }
-
-    public WorkshopDto updateWorkshop(int id, String name) {
-        Workshop workshop = workshopRepository.findById(id).orElseThrow();
-        workshop.setName(name);
-        return convertToWorkshopDto(workshopRepository.save(workshop));
     }
 
     public WorkshopDto createWorkshop(String name, int userId) {
@@ -44,7 +34,23 @@ public class WorkshopService {
         workshop.setName(name);
         workshop.setUser(userRepository.findById(userId).orElseThrow());
         return convertToWorkshopDto(workshopRepository.save(workshop));
+    }
 
+    public WorkshopDto updateWorkshop(int userId, int workshopId, String name) {
+        Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
+        if (workshop.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot update this workshop");
+        }
+        workshop.setName(name);
+        return convertToWorkshopDto(workshopRepository.save(workshop));
+    }
+
+    public void deleteWorkshop(int userId, int workshopId) {
+        Workshop workshop = workshopRepository.findById(workshopId).orElseThrow();
+        if (workshop.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot update this workshop");
+        }
+        workshopRepository.deleteById(workshopId);
     }
 
     private WorkshopDto convertToWorkshopDto(Workshop workshop) {

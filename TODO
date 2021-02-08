@@ -1,0 +1,5 @@
+1. Create an exception for authorization problems
+2. Add a warehouse connection to an autoPart
+3. Add unit of measurement entity for parts
+4. Org-mode
+5. Add auth roles

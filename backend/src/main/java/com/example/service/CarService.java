@@ -21,13 +21,37 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    public void deleteCar(int carId) {
-        carRepository.deleteById(carId);
+    public List<GetCarResponseDto> getAllClientsCars(int userId, int clientId) {
+        Client client = clientRepository.findById(clientId).orElseThrow();
+        if (client.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot view these cars");
+        }
+        return clientRepository.findById(clientId)
+                .map(Client::getCarList)
+                .map(cl -> cl.stream().map(this::convertToGetCarResponseDto).collect(Collectors.toList()))
+                .orElseThrow();
     }
 
-    public GetCarResponseDto updateCar(int clientId, int carId, String brand, String model, String vin, String plate) {
+    public GetCarResponseDto createCar(int userId, int clientId, String brand, String model, String vin, String plate) {
+        Client client = clientRepository.findById(clientId).orElseThrow();
+        if (client.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot create car here");
+        }
+        Car car = new Car();
+        car.setClient(client);
+        car.setBrand(brand);
+        car.setModel(model);
+        car.setVin(vin);
+        car.setPlate(plate);
+        return convertToGetCarResponseDto(carRepository.save(car));
+    }
+//business logic problem
+    public GetCarResponseDto updateCar(int userId, int clientId, int carId, String brand, String model, String vin, String plate) {
         Client client = clientRepository.findById(clientId).orElseThrow();
         Car car = carRepository.findById(carId).orElseThrow();
+        if (client.getUser().getId() != userId) {
+            throw new RuntimeException(userId + " cannot update this car");
+        }
         car.setClient(client);
         car.setBrand(brand);
         car.setModel(model);
@@ -36,21 +60,9 @@ public class CarService {
         return convertToGetCarResponseDto(carRepository.save(car));
     }
 
-    public GetCarResponseDto createCar(int id, String brand, String model, String vin, String plate) {
-        Car car = new Car();
-        car.setClient(clientRepository.findById(id).orElseThrow());
-        car.setBrand(brand);
-        car.setModel(model);
-        car.setVin(vin);
-        car.setPlate(plate);
-        return convertToGetCarResponseDto(carRepository.save(car));
-    }
+    public void deleteCar(int userId, int carId) {
 
-    public List<GetCarResponseDto> getAllClientsCars(Integer id) {
-        return clientRepository.findById(id)
-                .map(Client::getCarList)
-                .map(cl -> cl.stream().map(this::convertToGetCarResponseDto).collect(Collectors.toList()))
-                .orElseThrow();
+        carRepository.deleteById(carId);
     }
 
     private GetCarResponseDto convertToGetCarResponseDto(Car car) {

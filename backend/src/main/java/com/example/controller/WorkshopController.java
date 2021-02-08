@@ -1,11 +1,13 @@
 package com.example.controller;
 
+import com.example.config.UserInfo;
 import com.example.dto.PostWorkshopRequestDto;
 import com.example.dto.WorkshopDto;
 import com.example.dto.UserWorkshopDto;
 import com.example.service.WorkshopService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,27 +24,33 @@ public class WorkshopController {
         this.workshopService = workshopService;
     }
 
-    @GetMapping("/user/{id}/workshops")
-    public List<UserWorkshopDto> getAllUsersWorkshops(@PathVariable (value = "id") int id) {
-        List<UserWorkshopDto> userWorkshop = workshopService.getAllUsersWorkshops(id);
-        return userWorkshop;
+    @GetMapping("/workshops")
+    public List<UserWorkshopDto> getAllUsersWorkshops(Authentication auth) {
+        log.info("{} request to get all workshops", auth);
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return workshopService.getAllUsersWorkshops(userId);
     }
 
     @PostMapping("/workshop")
-    public WorkshopDto createWorkshop(@Valid @RequestBody PostWorkshopRequestDto workshopDetails) {
-        log.info("Request to create workshop: {}", workshopDetails);
-        return workshopService.createWorkshop(workshopDetails.getName(), workshopDetails.getUserId());
+    public WorkshopDto createWorkshop(Authentication auth,
+                                      @Valid @RequestBody PostWorkshopRequestDto workshopDetails) {
+        log.info("{} request to create workshop: ", auth);
+        Integer id = ((UserInfo)auth.getPrincipal()).getId();
+        return workshopService.createWorkshop(workshopDetails.getName(), id);
     }
 
-    @PutMapping("/workshop/{id}")
-    public WorkshopDto updateWorkshop(@PathVariable(value = "id") int id,
+    @PutMapping("/workshop/{workshopId}")
+    public WorkshopDto updateWorkshop(Authentication auth,
+                                      @PathVariable(value = "workshopId") int workshopId,
                                       @Valid @RequestBody WorkshopDto workshopDetails) {
-        return workshopService.updateWorkshop(id, workshopDetails.getWorkshopName());
+        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
+        return workshopService.updateWorkshop(userId, workshopId, workshopDetails.getWorkshopName());
     }
 
-    @DeleteMapping("/workshop/{id}")
-    public void deleteWorkshop(@PathVariable int id) {
-        log.info("Request to delete workshop: {}", id);
-        workshopService.deleteWorkshop(id);
+    @DeleteMapping("/workshop/{workshopId}")
+    public void deleteWorkshop(Authentication auth, @PathVariable(value = "workshopId") int workshopId) {
+        log.info("{} request to delete workshop", auth);
+        Integer id = ((UserInfo)auth.getPrincipal()).getId();
+        workshopService.deleteWorkshop(id, workshopId);
     }
 }

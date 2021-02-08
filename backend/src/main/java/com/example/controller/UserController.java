@@ -32,8 +32,8 @@ public class UserController {
         return userService.createUser(userDetails.getName(), userDetails.getEmail());
     }
 
-    @PutMapping("/user/{id}")
-    public GetUserResponseDto updateUser(@PathVariable(value = "id") int userId,
+    @PutMapping("/user/{userId}")
+    public GetUserResponseDto updateUser(@PathVariable(value = "userId") int userId,
                                          @Valid @RequestBody PutUserRequestDto userDetails) {
         return userService.updateUser(userId, userDetails.getName(), userDetails.getEmail());
     }
