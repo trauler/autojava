@@ -39,6 +39,17 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Service> serviceList;
 
+    @OneToMany(mappedBy = "user")
+    private List<ServiceType> serviceTypeList;
+
+    public List<ServiceType> getServiceTypeList() {
+        return serviceTypeList;
+    }
+
+    public void setServiceTypeList(List<ServiceType> serviceTypeList) {
+        this.serviceTypeList = serviceTypeList;
+    }
+
     public List<Service> getServiceList() {
         return serviceList;
     }

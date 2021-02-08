@@ -1,11 +1,13 @@
 package com.example.dto;
 
+import java.math.BigDecimal;
+
 public class AutoPartDto {
     private String name;
     private String description;
     private Integer purchasePrice;
     private Integer retailPrice;
-    private Double quantity;
+    private BigDecimal quantity;
 
     public String getName() {
         return name;
@@ -39,11 +41,11 @@ public class AutoPartDto {
         this.retailPrice = retailPrice;
     }
 
-    public Double getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Double quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 }
