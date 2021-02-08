@@ -1,102 +1,102 @@
 create table USERS (
-    id serial PRIMARY KEY,
-    status integer,
-    email text NOT NULL,
-    name text NOT NULL,
-    encrypted_password text
+    ID serial primary key,
+    STATUS integer,
+    EMAIL text not null,
+    NAME text not null,
+    PASSWORD text
 );
-create table WORKSHOP (
-    id serial PRIMARY KEY,
-    vid integer,
-    name text NOT NULL,
-    updated_at DATE,
-    user_id integer,
-    FOREIGN KEY (user_id) REFERENCES USERS (id)
+create table WORKSHOPS (
+    ID serial primary key,
+    V_ID integer,
+    NAME text not null,
+    UPDATED_AT date,
+    USER_ID integer,
+    foreign key (USER_ID) references USERS (ID)
 );
-create table STATION (
-    id serial PRIMARY KEY,
-    workshop_id integer NOT NULL,
-    name text NOT NULL,
-    FOREIGN KEY (workshop_id) REFERENCES WORKSHOP (id)
+create table STATIONS (
+    ID serial primary key,
+    WORKSHOP_ID integer not null,
+    NAME text not null,
+    foreign key (WORKSHOP_ID) references WORKSHOPS (ID)
 );
-create table WAREHOUSE (
-    id serial PRIMARY KEY,
-    name text NOT NULL,
-    address text NOT NULL,
-    user_id integer,
-    FOREIGN KEY (user_id) REFERENCES USERS (id)
+create table WAREHOUSES (
+    ID serial primary key,
+    NAME text not null,
+    ADDRESS text not null,
+    USER_ID integer,
+    foreign key (USER_ID) references USERS (ID)
 );
-create table CLIENT (
-    id serial PRIMARY KEY,
-    name text,
-    surname text,
-    middleName text,
-    phone text,
-    email text,
-    user_id integer,
-    FOREIGN KEY (user_id) REFERENCES USERS (id)
+create table CLIENTS (
+    ID serial primary key,
+    NAME text,
+    SURNAME text,
+    MIDDLE_NAME text,
+    PHONE text,
+    EMAIL text,
+    USER_ID integer,
+    foreign key (USER_ID) references USERS (ID)
 );
-create table CAR (
-    id serial PRIMARY KEY,
-    brand text,
-    model text,
-    vin text,
-    plate text,
-    client_id integer,
-    FOREIGN KEY (client_id) REFERENCES CLIENT (id)
+create table CARS (
+    ID serial primary key,
+    BRAND text,
+    MODEL text,
+    VIN text,
+    PLATE text,
+    CLIENT_ID integer,
+    foreign key (CLIENT_ID) references CLIENTS (ID)
 );
 create table AUTO_PARTS (
-    id serial PRIMARY KEY,
-    name text,
-    description text,
-    purchasePrice integer,
-    retailPrice integer,
-    quantity decimal(19, 2),
-    user_id integer,
-    FOREIGN KEY (user_id) REFERENCES USERS (id)
+    ID serial primary key,
+    NAME text,
+    DESCRIPTION text,
+    PURCHASE_PRICE integer,
+    RETAIL_PRICE integer,
+    QUANTITY decimal(19, 2),
+    USER_ID integer,
+    foreign key (USER_ID) references USERS (ID)
 );
-create table SERVICE (
-    id serial PRIMARY KEY,
-    vid integer,
-    name text,
-    cost int,
-    user_id integer,
-    FOREIGN KEY (user_id) REFERENCES USERS (id)
+create table SERVICES (
+    ID serial primary key,
+    V_ID integer,
+    NAME text,
+    COST integer,
+    USER_ID integer,
+    foreign key (USER_ID) references USERS (ID)
 );
-create table SERVICE_TYPE (
-    id serial PRIMARY KEY,
-    name text,
-    user_id int,
-    FOREIGN KEY (user_id) REFERENCES USERS (id)
+create table SERVICE_TYPES (
+    ID serial primary key,
+    NAME text,
+    USER_ID integer,
+    foreign key (USER_ID) references USERS (ID)
 );
 create table ORDERS (
-    id serial PRIMARY KEY,
-    station_id int,
-    car_id int,
-    FOREIGN KEY (station_id) REFERENCES STATION (id),
-    FOREIGN KEY (car_id) REFERENCES CAR (id)
+    ID serial primary key,
+    STATION_ID integer,
+    CAR_ID integer,
+    foreign key (STATION_ID) references STATIONS (ID),
+    foreign key (CAR_ID) references CARS (ID)
 );
-create table ORDER_AUTO_PART (
-    id serial PRIMARY KEY,
-    auto_part_id int,
-    quantity decimal(19, 2),
-    order_id int,
-    FOREIGN KEY (auto_part_id) REFERENCES AUTO_PARTS (id),
-    FOREIGN KEY (order_id) REFERENCES ORDERS (id)
+create table ORDER_AUTO_PARTS (
+    ID serial primary key,
+    AUTO_PART_ID integer,
+    QUANTITY decimal(19, 2),
+    ORDER_ID integer,
+    foreign key (AUTO_PART_ID) references AUTO_PARTS (ID),
+    foreign key (ORDER_ID) references ORDERS (ID)
 );
 create table AUTO_PART_CROSSES (
-    id serial PRIMARY KEY,
-    notOeBrand text,
-    notOeCode text,
-    oeBrand text,
-    oeCode text
+    ID serial primary key,
+    NOT_OE_BRAND text,
+    NOT_OE_CODE text,
+    OE_BRAND text,
+    OE_CODE text
 );
-create table ORDER_SERVICE (
-    id serial PRIMARY KEY,
-    cost int,
-    quantity decimal(19, 2),
-    service_id int,
-    order_id int,
-    FOREIGN KEY (service_id) REFERENCES SERVICE (id),
-    FOREIGN KEY (order_id) REFERENCES ORDERS (id)
+create table ORDER_SERVICES (
+    ID serial primary key,
+    COST integer,
+    QUANTITY decimal(19, 2),
+    SERVICE_ID integer,
+    ORDER_ID integer,
+    foreign key (SERVICE_ID) references SERVICES (ID),
+    foreign key (ORDER_ID) references ORDERS (ID)
 );

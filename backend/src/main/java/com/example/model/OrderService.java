@@ -3,7 +3,7 @@ package com.example.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Table(name = "order_service")
+@Table(name = "ORDER_SERVICES")
 @Entity
 public class OrderService {
     @Id

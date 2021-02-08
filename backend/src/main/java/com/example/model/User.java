@@ -20,7 +20,7 @@ public class User {
     private String email;
     @Column(name = "name")
     private String name;
-    @Column(name = "encrypted_password")
+    @Column(name = "password")
     private String encryptedPassword;
 
     @OneToMany(mappedBy = "user")

@@ -16,9 +16,9 @@ public class AutoPart {
     private String name;
     @Column(name = "description")
     private String description;
-    @Column(name = "purchasePrice")
+    @Column(name = "purchase_price")
     private Integer purchasePrice;
-    @Column(name = "retailPrice")
+    @Column(name = "retail_price")
     private Integer retailPrice;
     @Column(name = "quantity")
     private BigDecimal quantity;
@@ -28,6 +28,14 @@ public class AutoPart {
     private User user;
     @OneToMany(mappedBy = "autoPart")
     private List<OrderAutoPart> orderAutoPartList;
+
+    public List<OrderAutoPart> getOrderAutoPartList() {
+        return orderAutoPartList;
+    }
+
+    public void setOrderAutoPartList(List<OrderAutoPart> orderAutoPartList) {
+        this.orderAutoPartList = orderAutoPartList;
+    }
 
     public Integer getId() {
         return id;

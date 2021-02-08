@@ -3,7 +3,7 @@ package com.example.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Table(name = "order_auto_part")
+@Table(name = "ORDER_AUTO_PARTS")
 @Entity
 public class OrderAutoPart {
     @Id

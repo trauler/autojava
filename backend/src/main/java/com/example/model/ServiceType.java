@@ -3,7 +3,7 @@ package com.example.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Table(name = "SERVICE_TYPE")
+@Table(name = "SERVICE_TYPES")
 @Entity
 public class ServiceType {
     @Id

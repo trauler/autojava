@@ -7,14 +7,14 @@ import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.List;
 
-@Table(name = "WORKSHOP")
+@Table(name = "WORKSHOPS")
 @Entity
 public class Workshop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "vid")
+    @Column(name = "v_id")
     private Integer vid;
     @Column(name = "name")
     @NotNull

@@ -10,13 +10,13 @@ public class AutoPartCross {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "notOeBrand")
+    @Column(name = "not_oe_brand")
     private String notOeBrand;
-    @Column(name = "notOeCode")
+    @Column(name = "not_oe_code")
     private String notOeCode;
-    @Column(name = "oeBrand")
+    @Column(name = "oe_brand")
     private String oeBrand;
-    @Column(name = "oeCode")
+    @Column(name = "oe_code")
     private String oeCode;
 
     public Integer getId() {
