@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Table(name = "WAREHOUSE")
+@Table(name = "WAREHOUSES")
 @Entity
 public class Warehouse {
     @Id

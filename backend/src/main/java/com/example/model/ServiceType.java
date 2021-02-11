@@ -1,27 +1,21 @@
 package com.example.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-@Table(name = "STATIONS")
+@Table(name = "SERVICE_TYPES")
 @Entity
-public class Station {
+public class ServiceType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     @Column(name = "name")
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="workshop_id")
-    private Workshop workshop;
-
-    public Workshop getWorkshop() {
-        return workshop;
-    }
-
-    public void setWorkshop(Workshop workshop) {
-        this.workshop = workshop;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @NotNull
+    private User user;
 
     public Integer getId() {
         return id;
@@ -37,5 +31,13 @@ public class Station {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

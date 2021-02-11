@@ -7,6 +7,7 @@ import com.example.repositore.AutoPartRepository;
 import com.example.repositore.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class AutoPartService {
                 .orElseThrow();
     }
 
-    public AutoPartDto createAutoPart(int userId, String name, String description, int purchasePrice, int retailPrice, double quantity) {
+    public AutoPartDto createAutoPart(int userId, String name, String description, int purchasePrice, int retailPrice, BigDecimal quantity) {
         AutoPart autoPart = new AutoPart();
         autoPart.setUser(userRepository.findById(userId).orElseThrow());
         autoPart.setName(name);
@@ -39,7 +40,7 @@ public class AutoPartService {
         return convertToAutoPartDto(autoPartRepository.save(autoPart));
     }
 
-    public AutoPartDto updateAutoPart(int userId, int partId, String name, String description, int purchasePrice, int retailPrice, double quantity) {
+    public AutoPartDto updateAutoPart(int userId, int partId, String name, String description, int purchasePrice, int retailPrice, BigDecimal quantity) {
         AutoPart autoPart = autoPartRepository.findById(partId).orElseThrow();
         if (autoPart.getUser().getId() != userId) {
             throw new RuntimeException(userId + " cannot update this part");

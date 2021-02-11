@@ -2,8 +2,11 @@ package com.example.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.List;
 
-@Entity(name = "autoParts")
+@Table(name = "AUTO_PARTS")
+@Entity
 public class AutoPart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,16 +16,26 @@ public class AutoPart {
     private String name;
     @Column(name = "description")
     private String description;
-    @Column(name = "purchasePrice")
+    @Column(name = "purchase_price")
     private Integer purchasePrice;
-    @Column(name = "retailPrice")
+    @Column(name = "retail_price")
     private Integer retailPrice;
     @Column(name = "quantity")
-    private Double quantity;
+    private BigDecimal quantity;
     @ManyToOne
     @JoinColumn(name = "user_id")
     @NotNull
     private User user;
+    @OneToMany(mappedBy = "autoPart")
+    private List<OrderAutoPart> orderAutoPartList;
+
+    public List<OrderAutoPart> getOrderAutoPartList() {
+        return orderAutoPartList;
+    }
+
+    public void setOrderAutoPartList(List<OrderAutoPart> orderAutoPartList) {
+        this.orderAutoPartList = orderAutoPartList;
+    }
 
     public Integer getId() {
         return id;
@@ -64,11 +77,11 @@ public class AutoPart {
         this.retailPrice = retailPrice;
     }
 
-    public Double getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Double quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 

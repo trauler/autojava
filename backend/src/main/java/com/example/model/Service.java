@@ -3,14 +3,14 @@ package com.example.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Table(name = "service")
+@Table(name = "SERVICES")
 @Entity
 public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "vid")
+    @Column(name = "v_id")
     private Integer vid;
     @Column(name = "name")
     private String name;

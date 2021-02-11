@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Table(name = "CLIENT")
+@Table(name = "CLIENTS")
 @Entity
 public class Client {
     @Id
@@ -15,7 +15,7 @@ public class Client {
     private String name;
     @Column(name = "surname")
     private String surname;
-    @Column(name = "middlename")
+    @Column(name = "middle_name")
     private String middleName;
     @Column(name = "phone")
     private String phone;

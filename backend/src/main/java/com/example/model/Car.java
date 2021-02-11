@@ -2,8 +2,9 @@ package com.example.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
-@Table(name = "car")
+@Table(name = "CARS")
 @Entity
 public class Car {
     @Id
@@ -22,6 +23,16 @@ public class Car {
     @JoinColumn(name = "client_id")
     @NotNull
     private Client client;
+    @OneToMany(mappedBy = "car")
+    private List<Order> orderList;
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
+    }
 
     public Integer getId() {
         return id;
