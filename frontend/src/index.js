@@ -1,18 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+import ScopedCssBaseline from '@material-ui/core/ScopedCssBaseline';
+import configureStore, { history } from './configureStore';
+import App from './containers/App';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import scssVars from './styles/variables.scss';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: scssVars.colorPrimaryMain,
+      dark: scssVars.colorPrimaryDark,
+      contrastText: scssVars.colorPrimaryMainContrast,
+    },
+  },
+});
+
+const store = configureStore();
+// const { reduxHistory } = store.getState();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <ScopedCssBaseline>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </ScopedCssBaseline>
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('app')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

@@ -1,0 +1,8 @@
+*.orig
+.idea/
+.firebase/
+
+node_modules/
+dist/
+*.lock
+*.error

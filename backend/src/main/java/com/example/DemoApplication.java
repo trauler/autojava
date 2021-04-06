@@ -44,13 +44,13 @@ public class DemoApplication {
 //    }
 
 
-    @Bean
-    public CommandLineRunner commandLineRunner1(UserRepository userRepository) {
-        return args -> {
-            List<User> list = userRepository.findAll();
-            for (User user : list) {
-                System.out.println(user.getName());
-            }
-        };
-    }
+//    @Bean
+//    public CommandLineRunner commandLineRunner1(UserRepository userRepository) {
+//        return args -> {
+//            List<User> list = userRepository.findAll();
+//            for (User user : list) {
+//                System.out.println(user.getName());
+//            }
+//        };
+//    }
 }
