@@ -4,9 +4,10 @@ COPY package.json .
 COPY package-lock.json .
 COPY ./scripts ./scripts
 RUN npm install
-COPY ./src ./src
-COPY ./public ./public
-RUN npm run build
+# COPY ./src ./src
+COPY . .
+# COPY ./public ./public
+RUN npm run build-dev
 RUN ls dist
 
 FROM nginx:stable-alpine

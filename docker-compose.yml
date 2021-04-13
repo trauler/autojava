@@ -3,8 +3,14 @@ services:
   backend:
     build: ./backend
     ports:
-      - "5000:5000"
+      - "8080:8080"
+      - "5005:5005"
   frontend:
     build: ./frontend
+    ports:
+      - "81:80"
   database:
     image: postgres:12-alpine
+    environment: 
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=autoapp2 
