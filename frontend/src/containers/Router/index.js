@@ -132,7 +132,7 @@ export const defaultRouter = [
     type: 'route',
     exact: true,
     strict: true,
-    path: '/admin/clients',
+    path: '/api/clients',
     component: Clients,
     group: 'Администратор',
     title: 'Справочник клиентов',

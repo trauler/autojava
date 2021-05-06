@@ -12,7 +12,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class ClientController {
     private final Logger log = LoggerFactory.getLogger(ClientController.class);
 

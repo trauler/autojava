@@ -1,14 +1,9 @@
 FROM node:14-slim as build
 WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
-COPY ./scripts ./scripts
+COPY package*.json /app/
 RUN npm install
-# COPY ./src ./src
-COPY . .
-# COPY ./public ./public
+COPY ./ /app/
 RUN npm run build-dev
-RUN ls dist
 
 FROM nginx:stable-alpine
 RUN rm /etc/nginx/conf.d/default.conf

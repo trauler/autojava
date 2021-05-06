@@ -33,6 +33,7 @@ const userAuth = (data) => (dispatch, getState) => {
       {
         type: SUCCESS_USER_AUTH,
         payload: (action, s, res) => {
+          console.log(res);
           return getJSON(res)
             .then(json => {
               const { token, user: { name } = {} } = json;

@@ -3,7 +3,6 @@ package com.example.config;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -19,11 +18,12 @@ import static org.springframework.util.StringUtils.hasText;
 public class JwtTokenFilter extends GenericFilterBean {
     public static final String AUTHORIZATION = "Authorization";
 
-    private JwtTokenProvider jwtTokenProvider;
-    private CustomUserDetailsService customUserDetailsService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
+    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider, CustomUserDetailsService customUserDetailsService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Override
@@ -31,8 +31,8 @@ public class JwtTokenFilter extends GenericFilterBean {
         logger.info("do filter...");
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            String userLogin = jwtTokenProvider.getLoginFromToken(token);
-            CustomUserDetails customUserDetails = customUserDetailsService.loadUserByUsername(userLogin);
+            String userEmail = jwtTokenProvider.getLoginFromToken(token);
+            CustomUserDetails customUserDetails = customUserDetailsService.loadUserByUsername(userEmail);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }

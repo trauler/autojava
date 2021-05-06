@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-dev": "cross-env NODE_ENV=development API_ROOT=http://backend:8080 node --require @babel/register \"./scripts/webpack/build.js\"",
+    "build-dev": "cross-env NODE_ENV=production API_ROOT=http://localhost:81/api node --require @babel/register \"./scripts/webpack/build.js\"",
     "start": "cross-env-shell NODE_ENV=development API_ROOT=http://localhost:8080 node --require @babel/register \"./scripts/webpack/start.js\"",
     "build": "cross-env NODE_ENV=production API_ROOT=https://guy-dev-auto-app.herokuapp.com node --require @babel/register \"./scripts/webpack/build.js\"",
     "analyzer": "webpack-bundle-analyzer \"./dist/stats.json\"",

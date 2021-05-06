@@ -17,10 +17,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final  JwtTokenFilter jwtTokenFilter;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, JwtTokenFilter jwtTokenFilter) {
+    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, JwtTokenFilter jwtTokenFilter, CustomUserDetailsService customUserDetailsService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.jwtTokenFilter = jwtTokenFilter;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Bean
@@ -44,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         http
-                .apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
+                .apply(new JwtTokenFilterConfigurer(jwtTokenProvider, customUserDetailsService));
     }
 
     @Override
