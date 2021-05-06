@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.GetUserResponseDto;
+import com.example.dto.PostRegistrationUserRequestDto;
 import com.example.dto.PostUserRequestDto;
 import com.example.dto.PutUserRequestDto;
 import com.example.service.UserService;
@@ -27,9 +28,9 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public GetUserResponseDto createUser(@Valid @RequestBody PostUserRequestDto userDetails) {
+    public PostRegistrationUserRequestDto createUser(@Valid @RequestBody PostUserRequestDto userDetails) {
         log.info("Request to create user: {}", userDetails);
-        return userService.createUser(userDetails.getName(), userDetails.getEmail());
+        return userService.createUser(userDetails.getName(), userDetails.getEmail(), userDetails.getPassword());
     }
 
     @PutMapping("/user/{userId}")

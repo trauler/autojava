@@ -25,7 +25,7 @@ hs_err_pid*
 =======
 HELP.md
 backend/target/
-!.mvn/wrapper/maven-wrapper.jar
+!backend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 

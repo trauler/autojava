@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5005:5005"
+  frontend:
+    build: ./frontend
+  database:
+    image: postgres:12-alpine
+    environment: 
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=autoapp2
+  gateway:
+    build: ./gateway
+    ports:
+      - "81:80"

@@ -9,6 +9,16 @@ public class PostUserRequestDto {
     @NotNull
     @Email
     private String email;
+    @NotNull
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getName() {
         return name;

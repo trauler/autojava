@@ -20,7 +20,8 @@ public class Workshop {
     @NotNull
     private String name;
     @Column(name = "updated_at")
-    private Date updatedAt; //fix it
+    private Date updatedAt;
+    //TODO fix it
     @ManyToOne
     @JoinColumn(name = "user_id")
     @NotNull
