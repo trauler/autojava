@@ -12,6 +12,10 @@ const SUCCESS_SAVE_CLIENT = 'SUCCESS_SAVE_CLIENT';
 const FAILURE_SAVE_CLIENT = 'FAILURE_SAVE_CLIENT';
 
 
+const REQUEST_UPDATE_CLIENT = 'REQUEST_UPDATE_CLIENT';
+const SUCCESS_UPDATE_CLIENT = 'SUCCESS_UPDATE_CLIENT';
+const FAILURE_UPDATE_CLIENT = 'FAILURE_UPDATE_CLIENT';
+
 const REQUEST_CLIENT_CARS = 'REQUEST_CLIENT_CARS';
 const SUCCESS_CLIENT_CARS = 'SUCCESS_CLIENT_CARS';
 const FAILURE_CLIENT_CARS = 'FAILURE_CLIENT_CARS';
@@ -62,6 +66,28 @@ const saveClient = (data) => (dispatch, getState) => {
         },
       },
       FAILURE_SAVE_CLIENT,
+    ],
+  };
+  return dispatch(callAuthApiJSON(request));
+};
+
+const updateClient = (data) => (dispatch, getState) => {
+  const { id, ...other } = data;
+
+  const request = {
+    method: 'PUT',
+    endpoint: getClientsUrl(id),
+    data: clientInfoSelector({ data: other }),
+    types: [
+      REQUEST_UPDATE_CLIENT,
+      {
+        type: SUCCESS_UPDATE_CLIENT,
+        payload: (action, s, res) => {
+          return getJSON(res)
+            .then(json => json);
+        },
+      },
+      FAILURE_UPDATE_CLIENT,
     ],
   };
   return dispatch(callAuthApiJSON(request));
@@ -140,6 +166,9 @@ export {
   REQUEST_SAVE_CLIENT,
   SUCCESS_SAVE_CLIENT,
   FAILURE_SAVE_CLIENT,
+  REQUEST_UPDATE_CLIENT,
+  SUCCESS_UPDATE_CLIENT,
+  FAILURE_UPDATE_CLIENT,
   REQUEST_CLIENT_CARS,
   SUCCESS_CLIENT_CARS,
   FAILURE_CLIENT_CARS,
@@ -152,6 +181,7 @@ export {
   FAILURE_DELETE_CLIENT_CAR,
   getClients,
   saveClient,
+  updateClient,
   getClientCars,
   saveClientCar,
   deleteClientCar,

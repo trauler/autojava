@@ -20,7 +20,6 @@ public class CustomUserDetails implements UserDetails {
         CustomUserDetails customUserDetails = new CustomUserDetails();
         customUserDetails.name = user.getName();
         customUserDetails.password = user.getEncryptedPassword();
-//        customUserDetails.getAuthorities() = Collections.singletonList(new );
         return customUserDetails;
     }
 
@@ -31,7 +30,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return name;
     }
 
     @Override

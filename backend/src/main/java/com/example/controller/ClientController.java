@@ -2,6 +2,8 @@ package com.example.controller;
 
 import com.example.config.UserInfo;
 import com.example.dto.GetClientResponseDto;
+import com.example.dto.UserAuthDto;
+import com.example.model.User;
 import com.example.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +26,11 @@ public class ClientController {
     @GetMapping("/clients")
     public List<GetClientResponseDto> getAllUsersClients(Authentication auth) {
         log.info("{} request to get all users clients", auth);
-        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
-        List<GetClientResponseDto> clientList = clientService.getAllUsersClients(userId);
+        List<GetClientResponseDto> clientList = clientService.getAllUsersClients(auth);
         return clientList;
     }
 
-    @PostMapping("/client")
+    @PostMapping("/clients")
     public GetClientResponseDto createClient(Authentication auth,
                                              @Valid @RequestBody GetClientResponseDto clientDetails) {
         log.info("{} request to create new client", auth);
@@ -38,7 +39,7 @@ public class ClientController {
                 clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());
     }
 
-    @PutMapping("/client/{clientId}")
+    @PutMapping("/clients/{clientId}")
     public GetClientResponseDto updateClient(Authentication auth,
                                              @PathVariable (value = "clientId") int clientId,
                                              @Valid @RequestBody GetClientResponseDto clientDetails) {
@@ -48,7 +49,7 @@ public class ClientController {
                 clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());
     }
 
-    @DeleteMapping("/client/{clientId}")
+    @DeleteMapping("/clients/{clientId}")
     public void deleteClient(Authentication auth,
                              @PathVariable (value = "clientId") int clientId) {
         log.info("{} request to delete client", auth);

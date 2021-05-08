@@ -74,6 +74,28 @@ export default function clients(state = initialState, action = {}) {
         error: true,
       };
 
+    case actions.REQUEST_UPDATE_CLIENT:
+      return {
+        ...state,
+        loaded: false,
+        error: false,
+      };
+
+    case actions.SUCCESS_UPDATE_CLIENT:
+      console.log(action.payload)
+      return {
+        ...state,
+        loaded: true,
+        error: false,
+      };
+
+    case actions.FAILURE_UPDATE_CLIENT:
+      return {
+        ...state,
+        loaded: true,
+        error: true,
+      };
+
     case actions.REQUEST_CLIENT_CARS:
       return {
         ...state,

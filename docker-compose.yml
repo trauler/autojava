@@ -11,6 +11,8 @@ services:
     environment: 
       - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=autoapp2
+    ports:
+      - "5432:5432"
   gateway:
     build: ./gateway
     ports:

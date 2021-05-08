@@ -3,9 +3,10 @@ import * as actions from '../actions/user';
 const initialState = {
   loaded: true,
   error: false,
-  isLoggedIn: false,
-  token: null,
-  name: '',
+  // isLoggedIn: false,
+  //TODO fix this part
+  token: localStorage.getItem('tokenData'),
+  name: localStorage.getItem('userName')
 };
 
 export default function user(state = initialState, action = {}) {
@@ -24,7 +25,7 @@ export default function user(state = initialState, action = {}) {
         ...state,
         loaded: true,
         error: false,
-        isLoggedIn: true,
+        // isLoggedIn: true,
         token: token,
         name: name,
       };

@@ -7,10 +7,11 @@ import { AUTH_PATH } from '../../constants';
 
 
 export default function Router(props) {
+  console.log(props)
   const {
     router,
     lastLocation,
-    user: { isLoggedIn },
+    user,
     location: { pathname },
   } = props;
 
@@ -23,6 +24,10 @@ export default function Router(props) {
       component: () => (<div>not found</div>),
     },
   ];
+
+  const isUserLoggedIn = (user) => {
+    return !!user.token
+  }
 
   const renderDefaultRedirect = (path = '/') => {
     return (
@@ -48,7 +53,7 @@ export default function Router(props) {
   return (
     <Fragment>
       <Suspense fallback={<Loader />}>
-          { !isLoggedIn ? (
+          { !isUserLoggedIn(user) ? (
             <Switch>
               <Route exact path={AUTH_PATH}>
                 <AuthPage />

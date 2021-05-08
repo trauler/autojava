@@ -1,10 +1,15 @@
 package com.example.service;
 
+import com.example.config.CustomUserDetails;
 import com.example.dto.GetClientResponseDto;
+import com.example.dto.UserAuthDto;
 import com.example.model.Client;
 import com.example.model.User;
 import com.example.repositore.ClientRepository;
 import com.example.repositore.UserRepository;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +26,10 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public List<GetClientResponseDto> getAllUsersClients(int userId) {
+    public List<GetClientResponseDto> getAllUsersClients(Authentication auth) {
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        User user = userRepository.findByName(userDetails.getUsername());
+        int userId = user.getId();
         return userRepository.findById(userId)
                 .map(User::getClientList)
                 .map(cl -> cl.stream().map(this::convertToGetClientResponseDto).collect(Collectors.toList()))

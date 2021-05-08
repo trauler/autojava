@@ -27,6 +27,7 @@ class Clients extends React.Component {
   componentDidMount = () => {
     const { clients: { loaded, inited }, getClients } = this.props;
     if (!inited && !loaded && !this.inited) getClients();
+    console.log(1)
     this.inited = true;
     this.setState({
       columns: this.getColumns(),
