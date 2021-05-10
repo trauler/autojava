@@ -1,10 +1,12 @@
 package com.example.service;
 
+import com.example.controller.AbstractController;
 import com.example.dto.GetCarResponseDto;
 import com.example.model.Car;
 import com.example.model.Client;
 import com.example.repositore.CarRepository;
 import com.example.repositore.ClientRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,14 +17,17 @@ public class CarService {
 
     private final ClientRepository clientRepository;
     private final CarRepository carRepository;
+    private final AbstractController abstractController;
 
-    public CarService(ClientRepository clientRepository, CarRepository carRepository) {
+    public CarService(ClientRepository clientRepository, CarRepository carRepository, AbstractController abstractController) {
         this.clientRepository = clientRepository;
         this.carRepository = carRepository;
+        this.abstractController = abstractController;
     }
 
-    public List<GetCarResponseDto> getAllClientsCars(int userId, int clientId) {
+    public List<GetCarResponseDto> getAllClientsCars(Authentication auth, int clientId) {
         Client client = clientRepository.findById(clientId).orElseThrow();
+        int userId = abstractController.getUserIdFromAuth(auth);
         if (client.getUser().getId() != userId) {
             throw new RuntimeException(userId + " cannot view these cars");
         }
@@ -32,8 +37,9 @@ public class CarService {
                 .orElseThrow();
     }
 
-    public GetCarResponseDto createCar(int userId, int clientId, String brand, String model, String vin, String plate) {
+    public GetCarResponseDto createCar(Authentication auth, int clientId, String brand, String model, String vin, String plate) {
         Client client = clientRepository.findById(clientId).orElseThrow();
+        int userId = abstractController.getUserIdFromAuth(auth);
         if (client.getUser().getId() != userId) {
             throw new RuntimeException(userId + " cannot create car here");
         }
@@ -45,13 +51,15 @@ public class CarService {
         car.setPlate(plate);
         return convertToGetCarResponseDto(carRepository.save(car));
     }
-//business logic problem
-    public GetCarResponseDto updateCar(int userId, int clientId, int carId, String brand, String model, String vin, String plate) {
+
+    public GetCarResponseDto updateCar(Authentication auth, int clientId, int carId, String brand, String model, String vin, String plate) {
         Client client = clientRepository.findById(clientId).orElseThrow();
         Car car = carRepository.findById(carId).orElseThrow();
+        int userId = abstractController.getUserIdFromAuth(auth);
         if (client.getUser().getId() != userId) {
             throw new RuntimeException(userId + " cannot update this car");
         }
+        car.setId(carId);
         car.setClient(client);
         car.setBrand(brand);
         car.setModel(model);
@@ -60,13 +68,14 @@ public class CarService {
         return convertToGetCarResponseDto(carRepository.save(car));
     }
 
-    public void deleteCar(int userId, int carId) {
-
+    public void deleteCar(Authentication auth, int carId) {
+        int userId = abstractController.getUserIdFromAuth(auth);
         carRepository.deleteById(carId);
     }
 
     private GetCarResponseDto convertToGetCarResponseDto(Car car) {
         GetCarResponseDto getCarResponseDto = new GetCarResponseDto();
+        getCarResponseDto.setId(car.getId());
         getCarResponseDto.setBrand(car.getBrand());
         getCarResponseDto.setModel(car.getModel());
         getCarResponseDto.setVin(car.getVin());

@@ -27,6 +27,8 @@ class Modal extends FormModal {
     const { saveClient } = this.props;
     const { data } = this.state;
     this.setState({ loading: true });
+    console.log(this.props);
+    console.log(this.state);
     if (this.isFormChanged())
       saveClient(data).then(({ payload }) => {
         this.handleSaved(formatClientData(payload));

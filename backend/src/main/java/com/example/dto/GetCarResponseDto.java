@@ -1,10 +1,19 @@
 package com.example.dto;
 
 public class GetCarResponseDto {
+    private int carId;
     private String brand;
     private String model;
     private String vin;
     private String plate;
+
+    public int getId() {
+        return carId;
+    }
+
+    public void setId(int carId) {
+        this.carId = carId;
+    }
 
     public String getBrand() {
         return brand;

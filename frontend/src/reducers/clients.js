@@ -82,7 +82,6 @@ export default function clients(state = initialState, action = {}) {
       };
 
     case actions.SUCCESS_UPDATE_CLIENT:
-      console.log(action.payload)
       return {
         ...state,
         loaded: true,

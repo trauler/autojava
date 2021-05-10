@@ -68,6 +68,7 @@ const saveClient = (data) => (dispatch, getState) => {
       FAILURE_SAVE_CLIENT,
     ],
   };
+  console.log(data)
   return dispatch(callAuthApiJSON(request));
 };
 

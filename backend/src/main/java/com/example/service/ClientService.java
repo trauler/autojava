@@ -47,17 +47,22 @@ public class ClientService {
         return convertToGetClientResponseDto(clientRepository.save(client));
     }
 
-    public GetClientResponseDto updateClient(int userId, int clientId, String name, String surname, String middleName, String phone, String email) {
+    public GetClientResponseDto updateClient(int clientId, String name, String surname, String middleName, String phone, String email, Authentication auth) {
         Client client = clientRepository.findById(clientId).orElseThrow();
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        User user = userRepository.findByName(userDetails.getUsername());
+        int userId = user.getId();
         if (client.getUser().getId() != userId) {
             throw new RuntimeException(userId + " cannot update this client");
+        } else {
+            client.setId(userId);
+            client.setName(name);
+            client.setSurname(surname);
+            client.setMiddleName(middleName);
+            client.setPhone(phone);
+            client.setEmail(email);
+            return convertToGetClientResponseDto(clientRepository.save(client));
         }
-        client.setName(name);
-        client.setSurname(surname);
-        client.setMiddleName(middleName);
-        client.setPhone(phone);
-        client.setEmail(email);
-        return convertToGetClientResponseDto(clientRepository.save(client));
     }
 
     public void deleteClient(int userId, int clientId) {
@@ -70,6 +75,7 @@ public class ClientService {
 
     private GetClientResponseDto convertToGetClientResponseDto(Client client) {
         GetClientResponseDto getClientResponseDto = new GetClientResponseDto();
+        getClientResponseDto.setId(client.getId());
         getClientResponseDto.setName(client.getName());
         getClientResponseDto.setSurname(client.getSurname());
         getClientResponseDto.setMiddleName(client.getMiddleName());

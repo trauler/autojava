@@ -1,11 +1,20 @@
 package com.example.dto;
 
 public class GetClientResponseDto {
+    private int id;
     private String name;
     private String surname;
     private String middleName;
     private String phone;
     private String email;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

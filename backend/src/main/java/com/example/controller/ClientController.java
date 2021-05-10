@@ -44,9 +44,8 @@ public class ClientController {
                                              @PathVariable (value = "clientId") int clientId,
                                              @Valid @RequestBody GetClientResponseDto clientDetails) {
         log.info("{} request to update client", auth);
-        Integer userId = ((UserInfo)auth.getPrincipal()).getId();
-        return clientService.updateClient(userId, clientId, clientDetails.getName(), clientDetails.getSurname(),
-                clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail());
+        return clientService.updateClient(clientId, clientDetails.getName(), clientDetails.getSurname(),
+                clientDetails.getMiddleName(), clientDetails.getPhone(), clientDetails.getEmail(), auth);
     }
 
     @DeleteMapping("/clients/{clientId}")
